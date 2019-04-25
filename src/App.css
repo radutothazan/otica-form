@@ -3,19 +3,34 @@
 }
 
 p, h1, h2, h3, h4, h5, header, label {
-  font-family: "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
+  font-family: "Poppins", "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
   color: #73879c !important;
 }
 
+button {
+  font-family: "Poppins", "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
+}
+
 .App-header {
-  background-color: #fff;
+  background-color: #F7F9FC;
   display: flex;
-  height: 8vmin;
+  height: 8vh;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
   border-bottom: 1px solid lightgray;
   font-weight: 500;
+}
+
+.logo {
+  position: absolute;
+  height: 6vmin;
+  left: 5vmin;
+}
+
+section {
+  padding: 8vh 0;
+  height: 82vh;
 }
 
 .App-link {
@@ -41,3 +56,34 @@ p, h1, h2, h3, h4, h5, header, label {
   text-indent: 1vmin;
 }
 
+.site-footer {
+  background-color: #F7F9FC;
+  width: 100% !important;
+  align-items: center;
+  padding: 3vmin 0;
+}
+
+.sectionWrapper {
+
+}
+
+.dropdown-toggle {
+  border: 1px solid #CED4DA;
+  padding: 0.5% 1% !important;
+  font-size: 14px;
+  font-weight: 400;
+  color: #495057;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+  "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+  sans-serif;
+}
+
+.dropdown-menu li{
+  padding: 0 1%;
+  font-size: 14px;
+  font-weight: 400;
+  color: #495057;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+  "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+  sans-serif;
+}

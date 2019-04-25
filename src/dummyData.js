@@ -81,11 +81,6 @@ export const colors = [
 
 export const socialApps = [
 	{
-		name: 'Select app',
-		value: '',
-		disabled: false,
-	},
-	{
 		name: 'Announcements',
 		value: 'announcements',
 		disabled: false,
@@ -104,11 +99,6 @@ export const socialApps = [
 
 export const professionalApps = [
 	{
-		name: 'Select App',
-		value: '',
-		disabled: false,
-	},
-	{
 		name: 'Q&A',
 		value: 'qa',
 		disabled: false,
@@ -121,11 +111,6 @@ export const professionalApps = [
 ];
 
 export const processesApps = [
-	{
-		name: 'Select App',
-		value: '',
-		disabled: false,
-	},
 	{
 		name: 'Workflow',
 		value: 'workflow',
