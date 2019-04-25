@@ -23,11 +23,6 @@ export const options = [
 
 export const colors = [
 	{
-		name: 'Select color',
-		value: '',
-		disabled: false,
-	},
-	{
 		name: 'Orange',
 		value: '#F19113',
 		disabled: false,

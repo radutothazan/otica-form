@@ -1,4 +1,7 @@
 import React, { Component, Fragment } from 'react';
+import ImagePicker from 'react-image-picker';
+import axios from 'axios';
+import 'react-image-picker/dist/index.css';
 import './App.css';
 import Logo from './oticaLogo.png';
 
@@ -108,16 +111,24 @@ class App extends Component {
 		)
 	};
 
+	_renderColorPicker = (label, colorsArray) => {
+		return (
+			<div className='form-group row input-group-sm'>
+				<label>{label}</label>
+				<ImagePicker
+					images={colorsArray.map((c, i) => ({ src: `${process.env.PUBLIC_URL}/images/${c.name.toLowerCase().replace(' ', '_')}.PNG`, value: i }))}
+					onPick={x => this.setState({ color: colors[x.value].name})}
+				/>
+			</div>
+		);
+	};
+
 	renderSpaceSection = () => {
-		const { colorImage } = this.state;
 		return (
 			<div className='sectionWrapper'>
 				<h4 className="h4 text-left">Space Section</h4>
 				{this.renderInputGroup('Space Name', 'companyName')}
-				{this.renderDropdown('Color', colors)}
-				{colorImage ?
-					<img src={`${process.env.PUBLIC_URL}/images/${colorImage}.PNG`} alt={colorImage}
-						 className="w-25"/> : null}
+				{this._renderColorPicker('Color', colors)}
 				{this.renderDropdown('Group Types', groupTypes)}
 				{this.renderDropdown('Social Apps', socialApps, true)}
 				{this.renderDropdown('Professional Apps', professionalApps, true)}
@@ -140,15 +151,31 @@ class App extends Component {
 		}
 		const { firstName, lastName, companyName, color, email } = this.state;
 		if (!userList.length || !firstName || !lastName || !companyName || !color || !email) return this.setState({ error: true });
-		const data = {
-			name: companyName,
-			username: `${firstName.toLowerCase()}${lastName.toLowerCase}`,
-			full_name: `${firstName} ${lastName}`,
-			email: email,
-			app_color: color,
-			users: userList
-		};
-		console.log('DATA', data)
+		// const data = {
+		// 	name: companyName,
+		// 	username: `${firstName}${lastName}`,
+		// 	full_name: `${firstName} ${lastName}`,
+		// 	email: email,
+		// 	app_color: color,
+		// 	users: userList
+		// };
+		const bodyFormData = new FormData();
+		bodyFormData.set('name', companyName);
+		bodyFormData.set('username', `${firstName}${lastName}`);
+		bodyFormData.set('full_name', `${firstName} ${lastName}`);
+		bodyFormData.set('email', email);
+		bodyFormData.set('app_color', color);
+		bodyFormData.set('users', JSON.stringify(userList));
+		return axios({
+			method: 'post',
+			url: 'http://dev-api.otica.ai/api/spaces_api/createSpace',
+			data: bodyFormData,
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			}
+		})
+			.then(r => console.log('RESPOISEn', r))
+			.catch(err => console.log('ERR', err));
 	};
 
 	renderInviteGroups = index => {
