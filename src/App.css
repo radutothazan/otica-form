@@ -30,7 +30,7 @@ button {
 
 section {
   padding: 8vh 0;
-  height: 82vh;
+  min-height: 82vh !important;
 }
 
 .App-link {

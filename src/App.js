@@ -138,14 +138,17 @@ class App extends Component {
 			}));
 			console.log('INVITED USERS LIST', userList)
 		}
+		const { firstName, lastName, companyName, color, email } = this.state;
+		if (!userList.length || !firstName || !lastName || !companyName || !color || !email) return this.setState({ error: true });
 		const data = {
-			users: userList,
-			name: 'companyName',
-			username: 'raduradu',
-			full_name: 'fill',
-			email: 'email',
-			app_color: 'Orange'
-		}
+			name: companyName,
+			username: `${firstName.toLowerCase()}${lastName.toLowerCase}`,
+			full_name: `${firstName} ${lastName}`,
+			email: email,
+			app_color: color,
+			users: userList
+		};
+		console.log('DATA', data)
 	};
 
 	renderInviteGroups = index => {
@@ -193,25 +196,39 @@ class App extends Component {
 		return section;
 	}
 
+	_renderContent() {
+		const { sectionIndex, error } = this.state;
+		if (error) return (
+			<section className="col-8 offset-2">
+				<div className="alert alert-danger" role="alert">
+					Some fields were not added. Try again!
+				</div>
+				<button className="btn btn-primary" onClick={() => this.setState({ error: false })}>Ok</button>
+			</section>
+		);
+		return (
+			<section className="col-8 offset-2">
+				<form onSubmit={this.onSubmit}>
+					{this.renderDropdown('Company Type', options)}
+					{this.renderSection()}
+					<button className="btn btn-primary mb-3 col-3 float-right"
+							onClick={this.onBtnClick}>{sectionIndex < 2 ? 'Next' : 'Submit'}</button>
+					{sectionIndex > 0 ?
+						<button className="btn btn-primary mb-3 col-3 float-left"
+								onClick={() => this.setState({ sectionIndex: sectionIndex - 1 })}>Previous</button> : null}
+				</form>
+			</section>
+		)
+	}
+
 	render() {
-		const { sectionIndex } = this.state;
 		return (
 			<div className="App">
 				<header className="App-header navbar fixed-top">
 					<img src={Logo} alt="logo" className='logo'/>
 					<span>Create Company</span>
 				</header>
-				<section className="col-8 offset-2">
-					<form onSubmit={this.onSubmit}>
-						{this.renderDropdown('Company Type', options)}
-						{this.renderSection()}
-						<button className="btn btn-primary mb-3 col-3 float-right"
-								onClick={this.onBtnClick}>{sectionIndex < 2 ? 'Next' : 'Submit'}</button>
-						{sectionIndex > 0 ?
-							<button className="btn btn-primary mb-3 col-3 float-left"
-									onClick={() => this.setState({ sectionIndex: sectionIndex - 1 })}>Previous</button> : null}
-					</form>
-				</section>
+				{this._renderContent()}
 				<footer className="site-footer row container-fluid">
 					<div className="col-4 offset-3">
 						<p>We are always enthusiastic to show our solutions and discuss them. You
