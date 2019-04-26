@@ -53,7 +53,7 @@ class App extends Component {
 		if(placeholder != '')
 		{
 			return (
-				<div className="form-group input-group-sm" className={cssClass}>
+				<div className={"form-group row input-group-sm "+cssClass}>
 					<input id={label} type={value === 'password' ? "password" : "text"} className="form-control"
 						   value={this.state[value] || ''}
 						   placeholder={placeholder}
@@ -63,7 +63,7 @@ class App extends Component {
 		}else
 		{
 			return (
-				<div className="form-group row input-group-sm" className={cssClass}>
+				<div className={"form-group row input-group-sm "+cssClass}>
 					<label>{label}</label>
 					<input id={label} type={value === 'password' ? "password" : "text"} className="form-control"
 						   value={this.state[value] || ''}
@@ -141,7 +141,7 @@ class App extends Component {
 		return (
 			<div className='sectionWrapper sectionWelcome'>
 				<h2 className="h4 text-left">Welcome to Otica.Spaces!</h2>
-				<div class="article_divider"></div>
+				<div className="article_divider"></div>
 				<p>Create your own space into Otica and invite your friends to join!</p>
 				<p>Customize your experience, create your own groups, choose the features you want and get immediate and reliable access to items of knowledge you need.</p>
 				<button className="btn-navigation mb-3 col-3 float-left" onClick={() => this.setState({ sectionIndex: 1 })}>
@@ -154,16 +154,21 @@ class App extends Component {
 	renderVerticalSection = () => {
 		return (
 			<div className='sectionWrapper sectionVertical'>
-				<h2 className="h4 text-left">Step 1/3 Tell us your expertise</h2>
-				<div class="article_divider"></div>
-				<p>By telling us your expertise we will trigger the right app template</p>
-				<div class="form-group row input-group-sm">
-					{this.renderDropdown('', options)}
-				</div>
-				<button className="btn-navigation mb-3 col-3 float-left" onClick={() => this.setState({ sectionIndex: 0 })}>Previous step</button>
-					
-				<button className="btn-navigation mb-3 col-3 float-right" onClick={() => this.setState({ sectionIndex: 2 })}>Next step</button>
-
+				<h2 className="h4 text-left">Step 1/3 Tell us more about you</h2>
+				<div className="article_divider"></div>
+				<p>By telling us more about you we will be able to choose the right app template for you and to create a user for you so you can login in your app's space</p>
+				
+					{this.renderDropdown('1. Choose your field of expertise', options)}
+					{this.renderInputGroup('2. Choose your first name', 'firstName')}
+					{this.renderInputGroup('3. Choose your last name', 'lastName')}
+					{this.renderInputGroup('4. Choose your email', 'email')}
+					{this.renderInputGroup('5. Choose your phone number', 'phone')}
+					{this.renderInputGroup('6. Choose your license number', 'licenseNumber', 7)}
+					{this.renderDropdown('7. Choose yout country', countries)}
+					<br/><br/><br/>
+					<button className="btn-navigation mb-3 col-3 float-left" onClick={() => this.setState({ sectionIndex: 0 })}>Previous step</button>
+					<button className="btn-navigation mb-3 col-3 float-right" onClick={() => this.setState({ sectionIndex: 2 })}>Next step</button>
+					<br/><br/><br/>
 			</div>
 		)
 	};
@@ -349,9 +354,9 @@ class App extends Component {
 		);
 		return (
 			
-				<div class="App-section-wrapper">
-					<div class="col-8 offset-2 App-section">
-						<div class="header_title">
+				<div className="App-section-wrapper">
+					<div className="col-8 offset-2 App-section">
+						<div className="header_title">
 				            <a href="http://otica.ai/">
 				            	<img src="http://spaces.otica.ai/static/media/oticaLogo.57635eed.png" alt="otica_logo_blog" />
 				            </a>
@@ -361,25 +366,25 @@ class App extends Component {
 							{this.renderSection()}
 						</form>
 					</div>
-					<div class="footer">
-				        <div class="footer_text">
+					<div className="footer">
+				        <div className="footer_text">
 				            <p>
 								We are always enthusiastic to show our solutions and discuss them.
 								You are invited to contact us with any query you have or any information you need.
 				                <br/>
 				                <a target="_blank" href="https://twitter.com/intent/tweet?text=Otica&amp;url=http://otica.ai">
-				                	<i class="fab fa-twitter" id="footer_icon"></i>
+				                	<i className="fab fa-twitter" id="footer_icon"></i>
 				          		</a>
 				                <a target="_blank" href="https://www.linkedin.com/company/otica-ai/">
-				                	<i class="fab fa-linkedin-in" id="footer_icon"></i>
+				                	<i className="fab fa-linkedin-in" id="footer_icon"></i>
 				                </a>
 				            </p>
 
 				        </div>
 
-				        <div class="footer_button_wrapper">
-				            <button class="footer_button">
-				                <a href="mailto:info@otica.ai" class="footer_button_text">Contact Us</a>
+				        <div className="footer_button_wrapper">
+				            <button className="footer_button">
+				                <a href="mailto:info@otica.ai" className="footer_button_text">Contact Us</a>
 				            </button>
 				        </div>
 					</div>

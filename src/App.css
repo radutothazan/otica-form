@@ -25,19 +25,18 @@ button.btn-navigation
     justify-content: center;
     padding: 0;
     height: 40px;
-    width: 18vh;
+    width:130px;
     border-radius: 6px;
     border-color: #4071C1;
     color:#4071C1;
     cursor:pointer;
-     min-width: 30vh;
 }
 
 button.btn-navigation-green
 {
    border-color: #27ae60;
    color: #27ae60;
-   min-width: 40vh;
+   width:200px;
 }
 
 button.btn-navigation a {
@@ -227,6 +226,10 @@ p {
     margin-left: 1vh;
 }
 
+.sectionWrapper .form-group{
+  width:100%;
+}
+
 .sectionWelcome, .sectionVertical, .sectionSpace,.sectionLoader {
   text-align: left;
   width:100%;
@@ -256,15 +259,15 @@ p {
 }
 
 .invite-name{
-  width:50%;
+  width:50% !important;
 }
 
 .invite-email{
-  width:35%;
+  width:35% !important; 
 }
 
 .invite-add{
-  width:12%;
+  width:12% !important;
 }
 
 .btn-add{
