@@ -25,7 +25,7 @@ const MultiSelect = ({ title, options = [], onChange, placeholder = 'Select mult
 	return (
 		<div className='d-flex flex-column w-100'>
 			<label className='d-flex align-self-start'>{title}</label>
-			<button type="button" className="btn btn-default btn-m dropdown-toggle d-flex justify-content-between align-items-center" data-toggle="dropdown"><span>{placeholder}</span> <span className="caret" /></button>
+			<button type="button" className="btn btn-default btn-m dropdown-toggle form-control d-flex justify-content-between align-items-center" data-toggle="dropdown"><span>{placeholder}</span> <span className="caret" /></button>
 			<ul className="dropdown-menu w-100">
 				{options.map(o => <li><input type="checkbox" onChange={() => onValueChange(o.value)}/>&nbsp; &nbsp; <span>{o.name}</span></li>)}
 			</ul>
@@ -49,15 +49,28 @@ class App extends Component {
 		this.setState({ [value]: e.target.value })
 	};
 
-	renderInputGroup = (label, value = '', maxLength) => {
-		return (
-			<div className="form-group row input-group-sm">
-				<label>{label}</label>
-				<input id={label} type={value === 'password' ? "password" : "text"} className="form-control"
-					   value={this.state[value] || ''}
-					   onChange={e => this.onInputChange(e, value, maxLength)}/>
-			</div>
-		)
+	renderInputGroup = (label, value = '', maxLength, placeholder = '', cssClass = '') => {
+		if(placeholder != '')
+		{
+			return (
+				<div className="form-group input-group-sm" className={cssClass}>
+					<input id={label} type={value === 'password' ? "password" : "text"} className="form-control"
+						   value={this.state[value] || ''}
+						   placeholder={placeholder}
+						   onChange={e => this.onInputChange(e, value, maxLength)}/>
+				</div>
+			)
+		}else
+		{
+			return (
+				<div className="form-group row input-group-sm" className={cssClass}>
+					<label>{label}</label>
+					<input id={label} type={value === 'password' ? "password" : "text"} className="form-control"
+						   value={this.state[value] || ''}
+						   onChange={e => this.onInputChange(e, value, maxLength)}/>
+				</div>
+			)
+		}
 	};
 
 	renderDropdown = (label, options, multiple) => {
@@ -67,6 +80,7 @@ class App extends Component {
 					<MultiSelect
 						title={label}
 						options={options}
+						class="form-control"
 						onChange={values => this.setState({ [label.replace(' ', '').toLowerCase()]: values })}
 					/>
 				</div>
@@ -123,16 +137,120 @@ class App extends Component {
 		);
 	};
 
+	renderWelcomeSection = () => {
+		return (
+			<div className='sectionWrapper sectionWelcome'>
+				<h2 className="h4 text-left">Welcome to Otica.Spaces!</h2>
+				<div class="article_divider"></div>
+				<p>Create your own space into Otica and invite your friends to join!</p>
+				<p>Customize your experience, create your own groups, choose the features you want and get immediate and reliable access to items of knowledge you need.</p>
+				<button className="btn-navigation mb-3 col-3 float-left" onClick={() => this.setState({ sectionIndex: 1 })}>
+					<a href="javascript:void(0)">Start !</a>
+				</button>
+			</div>
+		)
+	};
+
+	renderVerticalSection = () => {
+		return (
+			<div className='sectionWrapper sectionVertical'>
+				<h2 className="h4 text-left">Step 1/3 Tell us your expertise</h2>
+				<div class="article_divider"></div>
+				<p>By telling us your expertise we will trigger the right app template</p>
+				<div class="form-group row input-group-sm">
+					{this.renderDropdown('', options)}
+				</div>
+				<button className="btn-navigation mb-3 col-3 float-left" onClick={() => this.setState({ sectionIndex: 0 })}>Previous step</button>
+					
+				<button className="btn-navigation mb-3 col-3 float-right" onClick={() => this.setState({ sectionIndex: 2 })}>Next step</button>
+
+			</div>
+		)
+	};
+
+	renderInviteSection = () => {
+		const { emailGroups } = this.state;
+		return (
+			<Fragment>
+				<div className='sectionWrapper sectionVertical'>
+					<h2 className="h4 text-left">Step 3/3 Invite people in your space</h2>
+					
+					<div class="article_divider"></div>
+					<p>By inviting users by name and email other will be able to access your space inside your app</p>
+
+					{new Array(emailGroups).fill().map((v, index) => this.renderInviteGroups(index))}
+					<br/><br/><br/>
+					
+					<button className="btn-navigation mb-3 col-3 float-left" onClick={() => this.setState({ sectionIndex: 2 })}>Previous</button>
+					
+					<button className="btn-navigation btn-navigation-green mb-3 col-3 float-right" onClick={() => this.setState({ sectionIndex: 4 })}>Create your space !</button>
+				</div>
+			</Fragment>
+
+		)
+	};
+
+	renderLoaderSection = () => {
+		const { emailGroups } = this.state;
+		var _this = this;
+		
+		setTimeout(function(){
+			_this.setState({sectionIndex: 5});
+		},5000);
+
+		return (
+			
+			<div className='sectionWrapper sectionLoader'>
+				<h2 className="h4 text-left">Please wait while we create your space</h2>
+					
+				<div class="article_divider"></div>
+				<img src="./preloader.gif" />
+				<p class='loading-text'>Loading ...</p>
+			</div>
+		)
+
+	};
+
+	renderSuccessSection = () => {
+
+
+		const { emailGroups } = this.state;
+		var _this = this;
+		
+		return (
+			
+			<div className='sectionWrapper sectionLoader'>
+			<h2 className="h4 text-left">Congrats, your space was created</h2>
+			<div class="article_divider"></div>
+				<i class="fa fa-check-circle fa-success"></i>
+				<p class='loading-text'>All done !</p>
+			</div>
+		)
+
+	};
+
 	renderSpaceSection = () => {
 		return (
-			<div className='sectionWrapper'>
-				<h4 className="h4 text-left">Space Section</h4>
-				{this.renderInputGroup('Space Name', 'companyName')}
-				{this._renderColorPicker('Color', colors)}
-				{this.renderDropdown('Group Types', groupTypes)}
-				{this.renderDropdown('Social Apps', socialApps, true)}
-				{this.renderDropdown('Professional Apps', professionalApps, true)}
-				{this.renderDropdown('Processes Apps', processesApps, true)}
+			<div className='sectionWrapper sectionSpace'>
+				<h2 className="h4 text-left">Step 2/3 Customize your space</h2>
+				<div class="article_divider"></div>
+
+				<p>Configure and customize your space. Choose the name, the coloring and enable/disable app features</p>
+				
+				{this.renderInputGroup('1. Choose space name', 'companyName')}
+				{this._renderColorPicker('2. Choose the color theme', colors)}
+				{this.renderDropdown('3. Choose the group types you want to allow in your app', groupTypes)}
+				{this.renderDropdown('4. Choose social capabilities', socialApps, true)}
+				{this.renderDropdown('5. Choose your professional capabilities', professionalApps, true)}
+				{this.renderDropdown('6. Choose your processes', processesApps, true)}
+				
+				<br/><br/><br/>
+				
+				<button className="btn-navigation mb-3 col-3 float-left" onClick={() => this.setState({ sectionIndex: 1 })}>Previous step</button>
+					
+				<button className="btn-navigation mb-3 col-3 float-right" onClick={() => this.setState({ sectionIndex: 3 })}>Next step</button>
+
+				<br/><br/><br/>
 			</div>
 		)
 	};
@@ -151,14 +269,7 @@ class App extends Component {
 		}
 		const { firstName, lastName, companyName, color, email } = this.state;
 		if (!userList.length || !firstName || !lastName || !companyName || !color || !email) return this.setState({ error: true });
-		// const data = {
-		// 	name: companyName,
-		// 	username: `${firstName}${lastName}`,
-		// 	full_name: `${firstName} ${lastName}`,
-		// 	email: email,
-		// 	app_color: color,
-		// 	users: userList
-		// };
+		
 		const bodyFormData = new FormData();
 		bodyFormData.set('name', companyName);
 		bodyFormData.set('username', `${firstName}${lastName}`);
@@ -180,42 +291,45 @@ class App extends Component {
 
 	renderInviteGroups = index => {
 		return (
-			<div className='row d-flex justify-content-between col-6 offset-3'>
-				{this.renderInputGroup('Name', `inviteName${index}`)}
-				{this.renderInputGroup('Email', `inviteEmail${index}`)}
+			<div className='row d-flex justify-content-between col-12 offset-3 invite-row'>
+					{this.renderInputGroup('', `inviteName${index}`, 512,'Enter full name', 'invite-name')}
+					{this.renderInputGroup('', `inviteEmail${index}`, 512,'Enter valid email', 'invite-email')}
+					<div class='invite-add'>
+						<button className="btn-add" onClick={this.onAddNewRow}>+</button>
+					</div>
 			</div>
 		)
 	};
 
 	onAddNewRow = () => {
+		debugger;
 		const { emailGroups } = this.state;
 		if (!this.state[`inviteName${emailGroups - 1}`] || !this.state[`inviteEmail${emailGroups - 1}`]) return;
 		this.setState({ emailGroups: emailGroups + 1 })
 	};
 
-	renderInvite = () => {
-		const { emailGroups } = this.state;
-		return (
-			<Fragment>
-				<h4 className="h4 text-left">Invite Users Section</h4>
-				{new Array(emailGroups).fill().map((v, index) => this.renderInviteGroups(index))}
-				<div>
-					<button className="btn btn-primary" onClick={this.onAddNewRow}>+ Add New
-					</button>
-				</div>
-			</Fragment>
-		)
-	};
-
 	renderSection() {
 		const { sectionIndex } = this.state;
+
 		let section = this.renderUserSection();
 		switch (sectionIndex) {
+			case 0:
+				section = this.renderWelcomeSection();
+				break;
 			case 1:
-				section = this.renderSpaceSection();
+				section = this.renderVerticalSection();
 				break;
 			case 2:
-				section = this.renderInvite();
+				section = this.renderSpaceSection();
+				break;
+			case 3:
+				section = this.renderInviteSection();
+				break;
+			case 4:
+				section = this.renderLoaderSection();
+				break;
+			case 5:
+				section = this.renderSuccessSection();
 				break;
 			default:
 				break;
@@ -226,7 +340,7 @@ class App extends Component {
 	_renderContent() {
 		const { sectionIndex, error } = this.state;
 		if (error) return (
-			<section className="col-8 offset-2">
+			<section className="col-8 offset-2 App-section">
 				<div className="alert alert-danger" role="alert">
 					Some fields were not added. Try again!
 				</div>
@@ -234,38 +348,58 @@ class App extends Component {
 			</section>
 		);
 		return (
-			<section className="col-8 offset-2">
-				<form onSubmit={this.onSubmit}>
-					{this.renderDropdown('Company Type', options)}
-					{this.renderSection()}
-					<button className="btn btn-primary mb-3 col-3 float-right"
-							onClick={this.onBtnClick}>{sectionIndex < 2 ? 'Next' : 'Submit'}</button>
-					{sectionIndex > 0 ?
-						<button className="btn btn-primary mb-3 col-3 float-left"
-								onClick={() => this.setState({ sectionIndex: sectionIndex - 1 })}>Previous</button> : null}
-				</form>
-			</section>
+			
+				<div class="App-section-wrapper">
+					<div class="col-8 offset-2 App-section">
+						<div class="header_title">
+				            <a href="http://otica.ai/">
+				            	<img src="http://spaces.otica.ai/static/media/oticaLogo.57635eed.png" alt="otica_logo_blog" />
+				            </a>
+				        </div>
+
+						<form onSubmit={this.onSubmit}>
+							{this.renderSection()}
+						</form>
+					</div>
+					<div class="footer">
+				        <div class="footer_text">
+				            <p>
+								We are always enthusiastic to show our solutions and discuss them.
+								You are invited to contact us with any query you have or any information you need.
+				                <br/>
+				                <a target="_blank" href="https://twitter.com/intent/tweet?text=Otica&amp;url=http://otica.ai">
+				                	<i class="fab fa-twitter" id="footer_icon"></i>
+				          		</a>
+				                <a target="_blank" href="https://www.linkedin.com/company/otica-ai/">
+				                	<i class="fab fa-linkedin-in" id="footer_icon"></i>
+				                </a>
+				            </p>
+
+				        </div>
+
+				        <div class="footer_button_wrapper">
+				            <button class="footer_button">
+				                <a href="mailto:info@otica.ai" class="footer_button_text">Contact Us</a>
+				            </button>
+				        </div>
+					</div>
+				</div>
+
 		)
 	}
 
 	render() {
 		return (
 			<div className="App">
-				<header className="App-header navbar fixed-top">
-					<img src={Logo} alt="logo" className='logo'/>
-					<span>Create Company</span>
-				</header>
+				<header className="header_wrapper">
+					<div className="header_navigation">
+			            <a className="header_navigation_item" href="#our_vision">Our vision</a>
+			            <a className="header_navigation_item" href="//blog.otica.ai">Blog</a>
+			            <a className="header_navigation_item" href="mailto:info@otica.ai">Contact us</a>
+			        </div>
+			    </header>
+				
 				{this._renderContent()}
-				<footer className="site-footer row container-fluid">
-					<div className="col-4 offset-3">
-						<p>We are always enthusiastic to show our solutions and discuss them. You
-							are invited to contact us with any query you have or any information you
-							need.</p>
-					</div>
-					<div className="col-2 offset-1">
-						<button className="btn btn-primary">Contact Us</button>
-					</div>
-				</footer>
 			</div>
 		);
 	}

@@ -1,6 +1,6 @@
 export const options = [
 	{
-		name: 'Select Company',
+		name: 'Select space vertical',
 		value: '',
 		disabled: false,
 	},
