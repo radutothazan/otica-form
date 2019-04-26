@@ -226,7 +226,7 @@ class App extends Component {
         bodyFormData.set('users', JSON.stringify(userList));
         axios({
             method: 'post',
-            url: 'http://dev-api.otica.ai/api/spaces_api/createSpace',
+            url: 'http://api.otica.ai/api/spaces_api/createSpace',
             data: bodyFormData,
             headers: {
                 'Content-Type': 'multipart/form-data',
