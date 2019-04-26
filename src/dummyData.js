@@ -1,10 +1,5 @@
 export const options = [
 	{
-		name: 'Select Company',
-		value: '',
-		disabled: false,
-	},
-	{
 		name: 'Law',
 		value: 'law',
 		disabled: false,

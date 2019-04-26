@@ -3,12 +3,54 @@
 }
 
 p, h1, h2, h3, h4, h5, header, label {
-  font-family: "Poppins", "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
-  color: #73879c !important;
+  font-family: "Poppins", sans-serif;
+  color: #243E75 !important;
+}
+
+p {
+  text-align: left;
+  line-height: 1.8;
+}
+
+hr {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.row-expertise {
+  width: 250px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 25px;
 }
 
 button {
   font-family: "Poppins", "Helvetica Neue", Roboto, Arial, "Droid Sans", sans-serif;
+}
+
+.button-main {
+  background: linear-gradient(90deg, #74AAE2, #4071C1);
+  border-radius: 6px;
+  border: 0;
+  height: 7vh;
+  width: 18vh;
+  text-align: center;
+  color: white;
+  font-family: system-ui;
+  font-style: normal;
+  text-rendering: auto;
+  box-sizing: border-box;
+  margin-top: 10px;
+  font-size: 2vh;
+  font-weight: 400;
+  cursor: default;
+  outline: none;
 }
 
 .App-header {
@@ -61,10 +103,15 @@ section {
   width: 100% !important;
   align-items: center;
   padding: 3vmin 0;
+  font-size: 18px;
+  font-weight: 400;
 }
 
 .sectionWrapper {
-
+  border: 1px solid #f7f9fc;
+  padding: 2% 2% !important;
+  background: #f7f9fc;
+  border-radius: 5px;
 }
 
 .dropdown-toggle {
