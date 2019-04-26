@@ -157,7 +157,7 @@ class App extends Component {
 				<h2 className="h4 text-left">Step 1/3 Tell us more about you</h2>
 				<div className="article_divider"></div>
 				<p>By telling us more about you we will be able to choose the right app template for you and to create a user for you so you can login in your app's space</p>
-				
+
 					{this.renderDropdown('1. Choose your field of expertise', options)}
 					{this.renderInputGroup('2. Choose your first name', 'firstName')}
 					{this.renderInputGroup('3. Choose your last name', 'lastName')}
@@ -179,15 +179,15 @@ class App extends Component {
 			<Fragment>
 				<div className='sectionWrapper sectionVertical'>
 					<h2 className="h4 text-left">Step 3/3 Invite people in your space</h2>
-					
+
 					<div class="article_divider"></div>
 					<p>By inviting users by name and email other will be able to access your space inside your app</p>
 
 					{new Array(emailGroups).fill().map((v, index) => this.renderInviteGroups(index))}
 					<br/><br/><br/>
-					
+
 					<button className="btn-navigation mb-3 col-3 float-left" onClick={() => this.setState({ sectionIndex: 2 })}>Previous</button>
-					
+
 					<button className="btn-navigation btn-navigation-green mb-3 col-3 float-right" onClick={() => this.setState({ sectionIndex: 4 })}>Create your space !</button>
 				</div>
 			</Fragment>
@@ -196,24 +196,58 @@ class App extends Component {
 	};
 
 	renderLoaderSection = () => {
-		const { emailGroups } = this.state;
-		var _this = this;
-		
-		setTimeout(function(){
-			_this.setState({sectionIndex: 5});
-		},5000);
+        const { sectionIndex, invitedUsers, emailGroups } = this.state;
+        const _this = this;
+        if (sectionIndex < 2) return this.setState({ sectionIndex: sectionIndex + 1 });
+        console.log('SUBMIT', this.state);
+        let userList = [];
+        const { firstName, lastName, companyName, color, email } = this.state;
+        if (!invitedUsers.length) {
+            if (invitedUsers.length > 0) {
+                userList = new Array(emailGroups).fill().map((v, i) => ({
+                    name: this.state[`inviteName${i}`],
+                    email: this.state[`inviteEmail${i}`],
+                }));
+            }
+            userList.push({
+                name: `${firstName} ${lastName}`,
+                email
+            });
+            console.log('INVITED USERS LIST', userList)
+        }
+        if (!userList.length || !firstName || !lastName || !companyName || !color || !email) return this.setState({ sectionIndex: 6 });
 
+        const bodyFormData = new FormData();
+        bodyFormData.set('name', companyName);
+        bodyFormData.set('username', `admin${firstName}${lastName}`);
+        bodyFormData.set('full_name', `${firstName} ${lastName}`);
+        bodyFormData.set('email', `admin${email}`);
+        bodyFormData.set('app_color', color);
+        bodyFormData.set('users', JSON.stringify(userList));
+        axios({
+            method: 'post',
+            url: 'http://dev-api.otica.ai/api/spaces_api/createSpace',
+            data: bodyFormData,
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            }
+        })
+            .then(() => {
+                _this.setState({sectionIndex: 5})
+            })
+            .catch(() => {
+                _this.setState({sectionIndex: 6})
+            });
 		return (
-			
+
 			<div className='sectionWrapper sectionLoader'>
 				<h2 className="h4 text-left">Please wait while we create your space</h2>
-					
+
 				<div class="article_divider"></div>
 				<img src="./preloader.gif" />
 				<p class='loading-text'>Loading ...</p>
 			</div>
 		)
-
 	};
 
 	renderSuccessSection = () => {
@@ -221,9 +255,9 @@ class App extends Component {
 
 		const { emailGroups } = this.state;
 		var _this = this;
-		
+
 		return (
-			
+
 			<div className='sectionWrapper sectionLoader'>
 			<h2 className="h4 text-left">Congrats, your space was created</h2>
 			<div class="article_divider"></div>
@@ -234,6 +268,18 @@ class App extends Component {
 
 	};
 
+    renderFailSection = () => {
+        return (
+
+            <div className='sectionWrapper sectionLoader'>
+                <h2 className="h4 text-left">An unknown error occurred</h2>
+                <div class="article_divider"></div>
+                <i class="fa fa-check-circle fa-success"></i>
+                <p class='loading-text'>Please try again!</p>
+            </div>
+        )
+    };
+
 	renderSpaceSection = () => {
 		return (
 			<div className='sectionWrapper sectionSpace'>
@@ -241,57 +287,23 @@ class App extends Component {
 				<div class="article_divider"></div>
 
 				<p>Configure and customize your space. Choose the name, the coloring and enable/disable app features</p>
-				
+
 				{this.renderInputGroup('1. Choose space name', 'companyName')}
 				{this._renderColorPicker('2. Choose the color theme', colors)}
 				{this.renderDropdown('3. Choose the group types you want to allow in your app', groupTypes)}
 				{this.renderDropdown('4. Choose social capabilities', socialApps, true)}
 				{this.renderDropdown('5. Choose your professional capabilities', professionalApps, true)}
 				{this.renderDropdown('6. Choose your processes', processesApps, true)}
-				
+
 				<br/><br/><br/>
-				
+
 				<button className="btn-navigation mb-3 col-3 float-left" onClick={() => this.setState({ sectionIndex: 1 })}>Previous step</button>
-					
+
 				<button className="btn-navigation mb-3 col-3 float-right" onClick={() => this.setState({ sectionIndex: 3 })}>Next step</button>
 
 				<br/><br/><br/>
 			</div>
 		)
-	};
-
-	onBtnClick = () => {
-		const { sectionIndex, invitedUsers, emailGroups } = this.state;
-		if (sectionIndex < 2) return this.setState({ sectionIndex: sectionIndex + 1 });
-		console.log('SUBMIT', this.state);
-		let userList = [];
-		if (!invitedUsers.length) {
-			userList = new Array(emailGroups).fill().map((v, i) => ({
-				name: this.state[`inviteName${i}`],
-				email: this.state[`inviteEmail${i}`],
-			}));
-			console.log('INVITED USERS LIST', userList)
-		}
-		const { firstName, lastName, companyName, color, email } = this.state;
-		if (!userList.length || !firstName || !lastName || !companyName || !color || !email) return this.setState({ error: true });
-		
-		const bodyFormData = new FormData();
-		bodyFormData.set('name', companyName);
-		bodyFormData.set('username', `${firstName}${lastName}`);
-		bodyFormData.set('full_name', `${firstName} ${lastName}`);
-		bodyFormData.set('email', email);
-		bodyFormData.set('app_color', color);
-		bodyFormData.set('users', JSON.stringify(userList));
-		return axios({
-			method: 'post',
-			url: 'http://dev-api.otica.ai/api/spaces_api/createSpace',
-			data: bodyFormData,
-			headers: {
-				'Content-Type': 'multipart/form-data',
-			}
-		})
-			.then(r => console.log('RESPOISEn', r))
-			.catch(err => console.log('ERR', err));
 	};
 
 	renderInviteGroups = index => {
@@ -307,7 +319,6 @@ class App extends Component {
 	};
 
 	onAddNewRow = () => {
-		debugger;
 		const { emailGroups } = this.state;
 		if (!this.state[`inviteName${emailGroups - 1}`] || !this.state[`inviteEmail${emailGroups - 1}`]) return;
 		this.setState({ emailGroups: emailGroups + 1 })
@@ -336,6 +347,9 @@ class App extends Component {
 			case 5:
 				section = this.renderSuccessSection();
 				break;
+            case 6:
+                section = this.renderFailSection();
+				break;
 			default:
 				break;
 		}
@@ -353,7 +367,7 @@ class App extends Component {
 			</section>
 		);
 		return (
-			
+
 				<div className="App-section-wrapper">
 					<div className="col-8 offset-2 App-section">
 						<div className="header_title">
@@ -403,7 +417,7 @@ class App extends Component {
 			            <a className="header_navigation_item" href="mailto:info@otica.ai">Contact us</a>
 			        </div>
 			    </header>
-				
+
 				{this._renderContent()}
 			</div>
 		);
