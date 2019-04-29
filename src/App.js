@@ -50,6 +50,7 @@ class App extends Component {
 	};
 
 	renderInputGroup = (label, value = '', maxLength, placeholder = '', cssClass = '') => {
+	    const labelErr = label + "err";
 		if(placeholder != '')
 		{
 			return (
@@ -65,7 +66,7 @@ class App extends Component {
 			return (
 				<div className={"form-group row input-group-sm "+cssClass}>
 					<label>{label}</label>
-					<input id={label} type={value === 'password' ? "password" : "text"} className="form-control"
+					<input id={label} type={value === 'password' ? "password" : "text"} className={`form-control ${this.state[labelErr] ? "labelError" : null}`}
 						   value={this.state[value] || ''}
 						   onChange={e => this.onInputChange(e, value, maxLength)}/>
 				</div>
@@ -142,8 +143,8 @@ class App extends Component {
 			<div className='sectionWrapper sectionWelcome'>
 				<h2 className="h4 text-left">Welcome to Otica.Spaces!</h2>
 				<div className="article_divider"></div>
-				<p>Create your own space into Otica and invite your friends to join!</p>
-				<p>Customize your experience, create your own groups, choose the features you want and get immediate and reliable access to items of knowledge you need.</p>
+				<p>In Otica.Spaces you can create your own space and invite your friends to join!</p>
+				<p>Customize your experience, create your own groups, choose the features you want to use, and be part of a professional community, providing access to reliable items of knowledge.</p>
 				<button className="btn-navigation mb-3 col-3 float-left" onClick={() => this.setState({ sectionIndex: 1 })}>
 					<a href="javascript:void(0)">Start !</a>
 				</button>
@@ -154,17 +155,17 @@ class App extends Component {
 	renderVerticalSection = () => {
 		return (
 			<div className='sectionWrapper sectionVertical'>
-				<h2 className="h4 text-left">Step 1/3 Tell us more about you</h2>
+				<h2 className="h4 text-left">Step 1/3 Tell us more about yourself</h2>
 				<div className="article_divider"></div>
-				<p>By telling us more about you we will be able to choose the right app template for you and to create a user for you so you can login in your app's space</p>
+				<p>By telling us more about yourself we will be able to choose the right app template, and create a user space suited for you</p>
 
 					{this.renderDropdown('1. Choose your field of expertise', options)}
-					{this.renderInputGroup('2. Choose your first name', 'firstName')}
-					{this.renderInputGroup('3. Choose your last name', 'lastName')}
-					{this.renderInputGroup('4. Choose your email', 'email')}
-					{this.renderInputGroup('5. Choose your phone number', 'phone')}
-					{this.renderInputGroup('6. Choose your license number', 'licenseNumber', 7)}
-					{this.renderDropdown('7. Choose yout country', countries)}
+					{this.renderInputGroup('2. Insert your first name', 'firstName')}
+					{this.renderInputGroup('3. Insert your last name', 'lastName')}
+					{this.renderInputGroup('4. Insert your email', 'email')}
+					{this.renderInputGroup('5. Insert your phone number', 'phone')}
+					{this.renderInputGroup('6. Insert your license number', 'licenseNumber', 7)}
+					{this.renderDropdown('7. Insert your country', countries)}
 					<br/><br/><br/>
 					<button className="btn-navigation mb-3 col-3 float-left" onClick={() => this.setState({ sectionIndex: 0 })}>Previous step</button>
 					<button className="btn-navigation mb-3 col-3 float-right" onClick={() => this.setState({ sectionIndex: 2 })}>Next step</button>
@@ -178,10 +179,10 @@ class App extends Component {
 		return (
 			<Fragment>
 				<div className='sectionWrapper sectionVertical'>
-					<h2 className="h4 text-left">Step 3/3 Invite people in your space</h2>
+					<h2 className="h4 text-left">Step 3/3 Invite people to your space</h2>
 
 					<div class="article_divider"></div>
-					<p>By inviting users by name and email other will be able to access your space inside your app</p>
+					<p>Inviting users will allow them to participate in your space.</p>
 
 					{new Array(emailGroups).fill().map((v, index) => this.renderInviteGroups(index))}
 					<br/><br/><br/>
@@ -258,11 +259,13 @@ class App extends Component {
 
 		return (
 
-			<div className='sectionWrapper sectionLoader'>
+			<div className='sectionWrapper '>
 			<h2 className="h4 text-left">Congrats, your space was created</h2>
-			<div class="article_divider"></div>
-				<i class="fa fa-check-circle fa-success"></i>
-				<p class='loading-text'>All done !</p>
+			<div class="article_divider"/>
+				<i class="fa fa-check-circle fa-success"/>
+				<p class='loading-text'>You are done! Now go to the AppStore, download Otica.ai app, and access your private space!</p>
+                <p className='loading-text'>(upon registration, be sure to use the same email address you provided here)</p>
+                <img className='qr' src="./qr.png" />
 			</div>
 		)
 
@@ -273,8 +276,8 @@ class App extends Component {
 
             <div className='sectionWrapper sectionLoader'>
                 <h2 className="h4 text-left">An unknown error occurred</h2>
-                <div class="article_divider"></div>
-                <i class="fa fa-check-circle fa-success"></i>
+                <div class="article_divider"/>
+                <i class="fa fa-exclamation-triangle fa-fail"/>
                 <p class='loading-text'>Please try again!</p>
             </div>
         )
@@ -286,14 +289,14 @@ class App extends Component {
 				<h2 className="h4 text-left">Step 2/3 Customize your space</h2>
 				<div class="article_divider"></div>
 
-				<p>Configure and customize your space. Choose the name, the coloring and enable/disable app features</p>
+				<p>Configure and customize your space. Choose name, color theme and enable/disable app features</p>
 
 				{this.renderInputGroup('1. Choose space name', 'companyName')}
 				{this._renderColorPicker('2. Choose the color theme', colors)}
 				{this.renderDropdown('3. Choose the group types you want to allow in your app', groupTypes)}
 				{this.renderDropdown('4. Choose social capabilities', socialApps, true)}
-				{this.renderDropdown('5. Choose your professional capabilities', professionalApps, true)}
-				{this.renderDropdown('6. Choose your processes', processesApps, true)}
+				{this.renderDropdown('5. Choose professional channels', professionalApps, true)}
+				{this.renderDropdown('6. Choose processes', processesApps, true)}
 
 				<br/><br/><br/>
 

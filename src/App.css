@@ -41,7 +41,7 @@ button.btn-navigation-green
 
 button.btn-navigation a {
   color:#243E75;
- 
+
 }
 
 button.btn-navigation a:hover {
@@ -139,7 +139,7 @@ button.btn-navigation a:hover {
   top:0px;
   left:0px;
 }
-.App-section 
+.App-section
 {
   display: block;
   padding: 50px;
@@ -159,7 +159,7 @@ p {
     margin-inline-end: 0px;
 }
 
-.footer 
+.footer
 {
     display: flex;
     align-items: center;
@@ -168,7 +168,7 @@ p {
     height: 1%;
     background-color: #f7f9fc;
     position:relative;
-    top:100px; 
+    top:100px;
 }
 
 .footer_text {
@@ -263,7 +263,7 @@ p {
 }
 
 .invite-email{
-  width:35% !important; 
+  width:35% !important;
 }
 
 .invite-add{
@@ -294,5 +294,15 @@ p {
 .fa-success{
   font-size:72px;
   margin-top:50px;
-  color:#27ae60;  
+  color:#27ae60;
+}
+
+.fa-fail{
+    font-size:72px;
+    margin-top:50px;
+    color:#c0392b;
+}
+
+.labelError {
+    border-color: #c0392b;
 }
