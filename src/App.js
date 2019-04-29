@@ -234,10 +234,14 @@ class App extends Component {
             }
         })
             .then(() => {
-                _this.setState({sectionIndex: 5})
+                setTimeout(() => {
+                    _this.setState({sectionIndex: 5})
+                }, 5000);
             })
             .catch(() => {
-                _this.setState({sectionIndex: 6})
+                setTimeout(() => {
+                    _this.setState({sectionIndex: 6})
+                }, 5000);
             });
 		return (
 
